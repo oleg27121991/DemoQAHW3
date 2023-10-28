@@ -1,4 +1,5 @@
-package Pages; /**
+package pages;
+/**
  * Страница с тестом формы demoqa.com/automation-practice-form
  */
 

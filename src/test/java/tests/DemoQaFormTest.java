@@ -1,7 +1,7 @@
-package Tests;
+package tests;
 
-import Base.BaseTest;
-import Pages.DemoqaFormPage;
+import base.BaseTest;
+import pages.DemoqaFormPage;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;

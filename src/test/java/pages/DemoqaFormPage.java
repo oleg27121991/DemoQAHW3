@@ -3,70 +3,85 @@ package pages;
  * Страница с тестом формы demoqa.com/automation-practice-form
  */
 
+import base.components.CalendarComponent;
+import base.components.TableWithResultComponent;
 import com.codeborne.selenide.*;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
 public class DemoqaFormPage {
-    private final SelenideElement inputFirstName = $("#firstName");
-    private final SelenideElement inputLastName = $("#lastName");
-    private final SelenideElement inputUserEmail = $("#userEmail");
-    private final SelenideElement radioMaleGender = $("#gender-radio-1");
-    private final SelenideElement radioFemaleGender = $("label[for='gender-radio-1']");
-    private final SelenideElement radioOtherGender = $("#gender-radio-3");
-    private final SelenideElement inputUserNumber = $("#userNumber");
-    private final SelenideElement inputCalendar = $("#dateOfBirthInput");
-    private final SelenideElement selectYearInCalendar = $(".react-datepicker__year-select");
-    private final SelenideElement selectMonthInCalendar = $(".react-datepicker__month-select");
-    private final SelenideElement divDatePickerDayInCalendar = $x("//div[contains(@class, 'react-datepicker__day') and contains(text(), '27')]");
-    private final SelenideElement inputSubjects = $("#subjectsInput");
-    private final SelenideElement checkboxSportHobbies = $("label[for='hobbies-checkbox-1']");
-    private final SelenideElement checkboxMusicHobbies = $("label[for='hobbies-checkbox-3']");
-    private final SelenideElement inputUploadPicture = $("#uploadPicture");
-    private final SelenideElement textAreaCurrentAddress = $("#currentAddress");
-    private final SelenideElement closeFixedban = $("#close-fixedban");
-    private final SelenideElement selectState = $("#react-select-3-input");
-    private final SelenideElement selectCity = $("#react-select-4-input");
+    CalendarComponent calendar = new CalendarComponent();
+    TableWithResultComponent table = new TableWithResultComponent();
+    private final SelenideElement inputFirstName = $("#firstName"),
+                            inputLastName = $("#lastName"),
+                            inputUserEmail = $("#userEmail"),
+                            radioMaleGender = $("label[for='gender-radio-1']"),
+                            radioFemaleGender = $("label[for='gender-radio-2']"),
+                            radioOtherGender = $("label[for='gender-radio-3']"),
+                            inputUserNumber = $("#userNumber"),
+                            inputCalendar = $("#dateOfBirthInput"),
+                            inputSubjects = $("#subjectsInput"),
+                            checkboxSportHobbies = $("label[for='hobbies-checkbox-1']"),
+                            checkboxMusicHobbies = $("label[for='hobbies-checkbox-3']"),
+                            inputUploadPicture = $("#uploadPicture"),
+                            textAreaCurrentAddress = $("#currentAddress"),
+                            selectState = $("#react-select-3-input"),
+                            selectCity = $("#react-select-4-input"),
+                            buttonSendForm = $("#submit");
 
 
     public DemoqaFormPage (String url) {
         Selenide.open(url);
+        executeJavaScript("$('#fixedban').remove()");
+        executeJavaScript("$('footer').remove()");
     }
 
-    public void addUserFirstName(String firstName) {
+    public DemoqaFormPage addUserFirstName(String firstName) {
         inputFirstName.sendKeys(firstName);
+
+        return this;
     }
 
-    public void addUserLastName(String lastName) {
+    public DemoqaFormPage addUserLastName(String lastName) {
         inputLastName.sendKeys(lastName);
+
+        return this;
     }
 
-    public void addUserEmail(String email) {
+    public DemoqaFormPage addUserEmail(String email) {
         inputUserEmail.sendKeys(email);
+
+        return this;
     }
 
     public String getRadioFemaleGenderText() {
-        return radioFemaleGender.getText();
+        return radioMaleGender.getText();
     }
 
-    public void checkUserGender() {
-        radioFemaleGender.parent().click();
+    public DemoqaFormPage checkUserGender() {
+        radioMaleGender.parent().click();
+
+        return this;
     }
 
-    public void addUserPhone(String phoneNumber) {
+    public DemoqaFormPage addUserPhone(String phoneNumber) {
         inputUserNumber.sendKeys(phoneNumber);
+
+        return this;
     }
 
-    public void choiceUserBirthday(String yearBirthday, String monthBirthday) {
+    public DemoqaFormPage setUserBirth(String year, String mouth, String day){
         inputCalendar.click();
-        selectYearInCalendar.selectOptionContainingText(yearBirthday);
-        selectMonthInCalendar.selectOptionContainingText(monthBirthday);
-        divDatePickerDayInCalendar.click();
+        calendar.setDate(year, mouth, day);
+        return this;
     }
 
-    public void choiceSubjects(String subjects) {
+    public DemoqaFormPage choiceSubjects(String subjects) {
         inputSubjects.setValue(subjects);
         inputSubjects.pressEnter();
+
+        return this;
     }
 
     public String getFirstHobbiesText() {
@@ -77,23 +92,57 @@ public class DemoqaFormPage {
         return checkboxSportHobbies.getText();
     }
 
-    public void choiceHobbies() {
+    public DemoqaFormPage choiceHobbies() {
         checkboxMusicHobbies.parent().click();
         checkboxSportHobbies.parent().click();
+
+        return this;
     }
 
-    public void choicePicture() {
+    public DemoqaFormPage choicePicture() {
         inputUploadPicture.uploadFromClasspath("koshachii-yazik.jpg");
+
+        return this;
     }
 
-    public void addCurrentAddress(String address) {
+    public DemoqaFormPage addCurrentAddress(String address) {
         textAreaCurrentAddress.sendKeys(address);
+
+        return this;
     }
 
-    public void choiceStateAndCity(String state, String city) {
-        closeFixedban.click();
-        selectState.setValue(state).pressEnter();
+    public DemoqaFormPage choiceStateAndCity(String state, String city) {
+        selectState.setValue(state).scrollIntoView(true).pressEnter();
         selectCity.setValue(city).pressEnter();
         selectCity.pressEnter();
+
+        return this;
+    }
+
+    public DemoqaFormPage sendForm() {
+        buttonSendForm.scrollIntoView(true).click();
+
+        return this;
+    }
+
+    public DemoqaFormPage checkResult(String value) {
+        table.checkTable(value);
+
+        return this;
+    }
+
+    public DemoqaFormPage checkInputInvalidBorderColor(String cssName, String cssValue) {
+        inputFirstName.shouldHave(cssValue(cssName, cssValue));
+        inputLastName.shouldHave(cssValue(cssName, cssValue));
+        inputUserNumber.shouldHave(cssValue(cssName, cssValue));
+
+        return this;
+    }
+
+    public DemoqaFormPage checkRadioInvalidBorderColor(String cssName, String cssValue) {
+        radioMaleGender.shouldHave(cssValue(cssName, cssValue));
+        radioMaleGender.shouldHave(pseudo(":before", cssName, cssValue));
+
+        return  this;
     }
 }

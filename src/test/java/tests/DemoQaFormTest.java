@@ -1,26 +1,14 @@
 package tests;
 
+import data.TestData;
 import pages.DemoqaFormPage;
 import org.junit.jupiter.api.Test;
 
 
 public class DemoQaFormTest extends BaseTest {
     DemoqaFormPage demoqaFormPage = new DemoqaFormPage();
-    private final static String DEMO_QA_PRACTICE_FORM_URL = "https://demoqa.com/automation-practice-form",
-            FIRST_NAME = "Oleg",
-            SECOND_NAME = "Test",
-            USER_EMAIL = "test@test.ru",
-            USER_MOBILE_NUMBER = "1234567890",
-            USER_GENDER = "Male",
-            USER_BIRTHDAY_YEAR = "1991",
-            USER_BIRTHDAY_MONTH = "December",
-            USER_BIRTHDAY_DAY = "30",
-            SUBJECTS = "English",
-            FIRST_HOBBIES = "Sports",
-            SECOND_HOBBIES = "Music",
-            CURRENT_ADDRESS = "Some town near some street 221b",
-            STATE = "NCR",
-            CITY = "Delhi",
+    TestData data = new TestData();
+    private final static String DEMO_QA_PRACTICE_FORM_URL = "/automation-practice-form",
 
             // Label in table (key)
             STUDENT_NAME = "Student Name",
@@ -40,48 +28,47 @@ public class DemoQaFormTest extends BaseTest {
     @Test
     void testEnteringCorrectDataIntoTheForm() {
         demoqaFormPage.openPage(DEMO_QA_PRACTICE_FORM_URL)
-                .addUserFirstName(FIRST_NAME)
-                .addUserLastName(SECOND_NAME)
-                .addUserEmail(USER_EMAIL)
-                .checkUserGender(USER_GENDER)
-                .addUserPhone(USER_MOBILE_NUMBER)
-                .setUserBirth(USER_BIRTHDAY_YEAR, USER_BIRTHDAY_MONTH, USER_BIRTHDAY_DAY)
-                .selectSubjects(SUBJECTS)
-                .selectHobbies(FIRST_HOBBIES)
-                .selectHobbies(SECOND_HOBBIES)
-                .choicePicture()
-                .addCurrentAddress(CURRENT_ADDRESS)
-                .choiceStateAndCity(STATE, CITY);
+                .addUserFirstName(data.firstName)
+                .addUserLastName(data.lastName)
+                .addUserEmail(data.email)
+                .checkUserGender(data.gender)
+                .addUserPhone(data.phoneNumber)
+                .setUserBirth(data.yearBirth, data.month, data.dayOfBirth)
+                .selectSubjects(data.subjects)
+                .selectHobbies(data.hobbies)
+                .choicePicture("1.jpg")
+                .addCurrentAddress(data.currentAddress)
+                .choiceStateAndCity(data.state, data.city);
 
-        demoqaFormPage.checkSubmittingForm(STUDENT_NAME, FIRST_NAME)
-                .checkSubmittingForm(STUDENT_NAME, SECOND_NAME)
-                .checkSubmittingForm(STUDENT_EMAIL, USER_EMAIL)
-                .checkSubmittingForm(STUDENT_GENDER, USER_GENDER)
-                .checkSubmittingForm(STUDENT_MOBILE, USER_MOBILE_NUMBER)
-                .checkSubmittingForm(STUDENT_BIRTH, USER_BIRTHDAY_YEAR)
-                .checkSubmittingForm(STUDENT_BIRTH, USER_BIRTHDAY_MONTH)
-                .checkSubmittingForm(STUDENT_BIRTH, USER_BIRTHDAY_DAY)
-                .checkSubmittingForm(STUDENT_SUBJECTS, SUBJECTS)
-                .checkSubmittingForm(STUDENT_HOBBIES, FIRST_HOBBIES)
-                .checkSubmittingForm(STUDENT_HOBBIES, SECOND_HOBBIES)
-                .checkSubmittingForm(STUDENT_ADDRESS, CURRENT_ADDRESS)
-                .checkSubmittingForm(STUDENT_STATE_AND_CITY, STATE)
-                .checkSubmittingForm(STUDENT_STATE_AND_CITY, CITY);
+        demoqaFormPage.checkSubmittingForm(STUDENT_NAME, data.firstName)
+                .checkSubmittingForm(STUDENT_NAME, data.lastName)
+                .checkSubmittingForm(STUDENT_EMAIL, data.email)
+                .checkSubmittingForm(STUDENT_GENDER, data.gender)
+                .checkSubmittingForm(STUDENT_MOBILE, data.phoneNumber)
+                .checkSubmittingForm(STUDENT_BIRTH, data.yearBirth)
+                .checkSubmittingForm(STUDENT_BIRTH, data.month)
+                .checkSubmittingForm(STUDENT_BIRTH, data.dayOfBirth)
+                .checkSubmittingForm(STUDENT_SUBJECTS, data.subjects)
+                .checkSubmittingForm(STUDENT_HOBBIES, data.hobbies)
+                .checkSubmittingForm(STUDENT_ADDRESS, data.currentAddress)
+                .checkSubmittingForm(STUDENT_STATE_AND_CITY, data.state)
+                .checkSubmittingForm(STUDENT_STATE_AND_CITY, data.city);
     }
 
     @Test
     void testEnteringMinimumDataIntoTheForm() {
         demoqaFormPage.openPage(DEMO_QA_PRACTICE_FORM_URL)
-                .addUserFirstName(FIRST_NAME)
-                .addUserLastName(SECOND_NAME)
-                .checkUserGender(USER_GENDER)
-                .addUserPhone(USER_MOBILE_NUMBER)
+                .addUserFirstName(data.firstName)
+                .addUserLastName(data.lastName)
+                .checkUserGender(data.gender)
+                .addUserPhone(data.phoneNumber)
                 .sendForm();
 
 
-        demoqaFormPage.checkSubmittingForm(STUDENT_NAME, FIRST_NAME)
-                .checkSubmittingForm(STUDENT_GENDER, USER_GENDER)
-                .checkSubmittingForm(STUDENT_MOBILE, USER_MOBILE_NUMBER);
+        demoqaFormPage.checkSubmittingForm(STUDENT_NAME, data.firstName)
+                .checkSubmittingForm(STUDENT_NAME, data.lastName)
+                .checkSubmittingForm(STUDENT_GENDER, data.gender)
+                .checkSubmittingForm(STUDENT_MOBILE, data.phoneNumber);
     }
 
     @Test

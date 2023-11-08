@@ -56,7 +56,7 @@ public class DemoqaFormPage {
     }
 
     public DemoqaFormPage checkUserGender(String gender) {
-        radioGender.parent().$(byText(gender)).click();
+        $(byText(gender)).click();
 
         return this;
     }
@@ -86,8 +86,8 @@ public class DemoqaFormPage {
         return this;
     }
 
-    public DemoqaFormPage choicePicture() {
-        inputUploadPicture.uploadFromClasspath("koshachii-yazik.jpg");
+    public DemoqaFormPage choicePicture(String imgName) {
+        inputUploadPicture.uploadFromClasspath(imgName);
 
         return this;
     }
